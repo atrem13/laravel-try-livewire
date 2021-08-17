@@ -10,9 +10,12 @@ class LiveTable extends Component
 {
     use WithPagination;
 
+    
     public $sortField = 'name'; // default sorting field
     public $sortAsc = true; // default sort direction
     public $search = '';
+
+    protected $listeners = ['delete'];
 
     public function sortBy($field)
     {
@@ -33,4 +36,12 @@ class LiveTable extends Component
                 ->simplePaginate(10),
         ]);
     }
+
+    public function delete($id)
+    {
+        $user = User::find($id);
+        $user->delete();
+        $this->dispatchBrowserEvent('user-deleted', ['user_name' => $user->name]);
+    }
+
 }

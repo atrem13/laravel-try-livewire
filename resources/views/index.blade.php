@@ -17,6 +17,7 @@
 
     @livewireScripts
     <script src="{{ asset('js/app.js') }}"></script>
+    <script src="{{ asset('js/users.js') }}" defer></script>
 
 </body>
 </html>
