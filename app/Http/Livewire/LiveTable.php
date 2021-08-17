@@ -14,8 +14,8 @@ class LiveTable extends Component
     public $sortField = 'name'; // default sorting field
     public $sortAsc = true; // default sort direction
     public $search = '';
-
-    protected $listeners = ['delete'];
+    
+    protected $listeners = ['delete', 'triggerRefresh' => '$refresh'];
 
     public function sortBy($field)
     {

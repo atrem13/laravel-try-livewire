@@ -13,3 +13,8 @@ window.addEventListener("user-deleted", (event) => {
 Livewire.on("triggerCreate", () => {
     $("#user-modal").modal("show");
 });
+
+window.addEventListener("user-saved", (event) => {
+    $("#user-modal").modal("hide");
+    alert(`User ${event.detail.user_name} was ${event.detail.action}!`);
+});
