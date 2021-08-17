@@ -18,3 +18,7 @@ window.addEventListener("user-saved", (event) => {
     $("#user-modal").modal("hide");
     alert(`User ${event.detail.user_name} was ${event.detail.action}!`);
 });
+
+Livewire.on("dataFetched", (user) => {
+    $("#user-modal").modal("show");
+});

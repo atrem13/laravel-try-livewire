@@ -7,10 +7,13 @@ use App\Models\User;
 
 class UserForm extends Component
 {
+    public $user_id;
     public $name;
     public $email;
     public $age;
     public $address;
+
+    protected $listeners = ['triggerEdit'];
 
     public function render()
     {
@@ -26,13 +29,26 @@ class UserForm extends Component
             'address' => 'required|min:10',
         ]);
 
-        $user = User::create(array_merge($validated, [
-            'user_type' => 'user',
-            'password' => bcrypt($this->email)
-        ]));
+        if ($this->user_id) {
+            $user = User::find($this->user_id)
+                ->update([
+                    'name' => $this->name,
+                    'email' => $this->email,
+                    'age' => $this->age,
+                    'address' => $this->address,
+                ]);
+    
+            $this->dispatchBrowserEvent('user-saved', ['action' => 'updated', 'user_name' => $this->name]);
+        } else {
+            $user = User::create(array_merge($validated, [
+                'user_type' => 'user',
+                'password' => bcrypt($this->email)
+            ]));
+    
+            $this->dispatchBrowserEvent('user-saved', ['action' => 'created', 'user_name' => $this->name]);
+        }
 
         $this->resetForm();
-        $this->dispatchBrowserEvent('user-saved', ['action' => 'created', 'user_name' => $user->name]);
         $this->emitTo('live-table', 'triggerRefresh');
     }
 
@@ -43,5 +59,16 @@ class UserForm extends Component
         $this->email = null;
         $this->age = null;
         $this->address = null;
+    }
+
+    public function triggerEdit($user)
+    {
+        $this->user_id = $user['id'];
+        $this->name = $user['name'];
+        $this->email = $user['email'];
+        $this->age = $user['age'];
+        $this->address = $user['address'];
+
+        $this->emit('dataFetched', $user);
     }
 }

@@ -5,7 +5,7 @@
                 <button class="btn btn-success" wire:click="$emit('triggerCreate')">Create New User</button>
             </div>
             <div class="float-right mt-5">
-                <input wire:model="search" class="form-control" type="text" placeholder="Search Users...">
+                <input wire:model.debounce.800ms="search" class="form-control" type="text" placeholder="Search Users...">
             </div>
         </div>
     </div>
@@ -67,9 +67,7 @@
                             </button>
                         </td>
                         <td>
-                            <button class="btn btn-sm btn-dark">
-                            Edit
-                            </button>
+                            <button class="btn btn-sm btn-dark" wire:click="$emitTo('user-form', 'triggerEdit', {{ $user }})">Edit</button>
                         </td>
                     </tr>
                 @endforeach
